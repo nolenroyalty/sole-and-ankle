@@ -24,7 +24,7 @@ const SuperHeader = () => {
 
 const Wrapper = styled.div`
   font-size: 0.875rem;
-  height: 40px;
+  min-height: 40px;
   color: ${COLORS.gray[300]};
   background-color: ${COLORS.gray[900]};
 
