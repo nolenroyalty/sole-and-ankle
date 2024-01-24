@@ -31,30 +31,25 @@ const ShoeCard = ({
       ? 'new-release'
       : 'default'
 
-  const sticker = variant !== "default" && (
-    <Sticker variant={variant}>
-      {variant === "on-sale" ? "Sale" : "Just Released!"}
-    </Sticker>
-  );
-
   return (
     <Link href={`/shoe/${slug}`}>
       <Wrapper>
         <ImageWrapper>
           <Image alt="" src={imageSrc} />
-          {sticker}
+          {variant === "new-release" && (
+            <NewReleaseSticker>New Release!</NewReleaseSticker>
+          )}
+          {variant === "on-sale" && <SaleSticker>Sale</SaleSticker>}
         </ImageWrapper>
         <Spacer size={12} />
         <Row>
           <Name>{name}</Name>
-          <Price struckPrice={variant === "on-sale"}>
-            {formatPrice(price)}
-          </Price>
+          <Price onSale={variant === "on-sale"}>{formatPrice(price)}</Price>
         </Row>
         <Row>
           <ColorInfo>{pluralize("Color", numOfColors)}</ColorInfo>
           {variant === "on-sale" && (
-            <Price sale={true}>{formatPrice(salePrice)}</Price>
+            <SalePrice>{formatPrice(salePrice)}</SalePrice>
           )}
         </Row>
       </Wrapper>
@@ -75,8 +70,14 @@ const Sticker = styled.div`
   border-radius: 2px;
 
   color: ${COLORS.white};
-  background-color: ${(p) =>
-    p.variant === "on-sale" ? COLORS.primary : COLORS.secondary};
+`;
+
+const SaleSticker = styled(Sticker)`
+  background-color: ${COLORS.primary};
+`;
+
+const NewReleaseSticker = styled(Sticker)`
+  background-color: ${COLORS.secondary};
 `;
 
 const Wrapper = styled.article``;
@@ -103,8 +104,8 @@ const Name = styled.h3`
 
 const Price = styled.span`
   font-weight: 600;
-  text-decoration: ${(props) => (props.struckPrice ? "line-through" : "none")};
-  color: ${(props) => (props.sale ? COLORS.primary : COLORS.gray[700])};
+  text-decoration: ${(props) => (props.onSale ? "line-through" : undefined)};
+  color: ${(props) => (props.onSale ? COLORS.gray[700] : undefined)};
 `;
 
 const ColorInfo = styled.p`
